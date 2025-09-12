@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="/plotly-3.1.0.min.js" charset="utf-8"></script>
+  s<style>
+    body{
+      background-color: black;
+    }
+  </style>
+</head>
+<body>
+  <div id="myDiv" ></div>
+
+
+  <script>
+
+urlParams = new URLSearchParams(window.location.search);
+const symbol = urlParams.get('symbol')
+
+
+fetch(`http://localhost:8080/api/history?symbol=${symbol}`).then( res => res.json()).then( result => {
+
+ console.log(result)
+  
+
+var trace = {
+  x: result["date"],
+  close: result["close"],
+  high: result["high"],
+  low: result["low"],
+  open: result["open"],
+  
+  // cutomise colors
+  increasing: {line: {color: '#17BECF'}},
+ decreasing: {line: {color: '#7F7F7F'}},
+   line: {color: 'rgba(31,119,180,1)'},
+
+  type: 'candlestick',
+  xaxis: 'x',
+  yaxis: 'y'
+};
+
+var data = [trace];
+
+var layout = {
+  dragmode: 'zoom',
+  showlegend: false,
+  xaxis: {
+    rangeslider: {
+		 visible: false
+	 }
+  }
+};
+
+const myDiv = document.getElementById('myDiv');
+Plotly.newPlot(myDiv, data, layout);
+
+
+}).catch( err => console.log(err))
+
+
+
+</script>
+</body>
+</html>

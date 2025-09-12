@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="/d3.v5.min.js"></script>
+
+ <style>
+*, *:before, *:after {
+	 box-sizing: border-box;
+}
+ html, body {
+	 width: 100%;
+	 height: 100%;
+	 margin: 0;
+	 background-color:black;
+}
+ nav {
+	 position: fixed;
+	 width: 100%;
+	 top: 0;
+	 padding: 16px;
+	 z-index: 100;
+}
+ nav .up {
+	 font: bold 14px/1 sans-serif;
+	 color: white;
+	 width: 92px;
+	 padding: 8px;
+	 background-color: rgba(230, 26, 60, .8);
+	 float: left;
+	 cursor: pointer;
+}
+ nav .up:hover {
+	 background-color: rgba(184, 20, 48, .8);
+}
+ .feature {
+	 position: relative;
+	 width: calc(100% - 0 * 2 * 1px);
+	 height: calc(100% - 0 * 2 * 1px);
+	 margin: 0px;
+	 overflow: hidden;
+}
+ .node {
+	 position: absolute;
+	 background: transparent url('') no-repeat 50% / cover;
+	 overflow: hidden;
+	 opacity: 0.8;
+	 transition: opacity 0.8s;
+	 cursor: pointer;
+}
+ .node .label {
+	 font-family: sans-serif;
+	 color: rgb(1, 0, 0);
+	 padding: 0;
+	 margin: 0;
+	 transition: color 0.4s, opacity 0.8s, filter 0.8s;
+}
+
+ .node .label p{
+margin-top: 0;
+}
+
+ .node .label-child {
+	 display: inline;
+	 text-align: center;
+	 font-family: sans-serif;
+	 color: rgba(255, 255, 255, .6);
+	 position: absolute;
+	 padding: 0;
+	 margin: 0;
+	 top: 50%;
+	 left: 50%;
+	 transform: translateX(-50%) translateY(-50%);
+	 transition: color 0.4s, opacity 0.8s, filter 0.8s;
+}
+
+ .node.hide {
+	 opacity: 0;
+	 pointer-events: none;
+}
+ .node.hide .label {
+	 filter: blur(10px);
+}
+ .node:hover .label {
+	 color: rgba(255, 255, 255, 1);
+}
+ .node.level-0 {
+	 z-index: 0;
+	 font-size: 2.5vmin;
+	 display: none;
+}
+ .node.level-1 {
+	 z-index: 0;
+	 font-size: 1.2vmin;
+}
+ .node.level-2 {
+	 z-index: 0;
+	 font-size: 1.2vmin;
+}
+ .node.level-3 {
+	 z-index: 1;
+	 font-size: 1.2vmin;
+}
+
+.loader {
+  width: 54px;
+  height: 54px;
+  position:absolute;
+  top: 50%;
+	left: 50%;
+	transform: translateX(-50%) translateY(-50%);
+  border-radius: 4px;
+  background-color: #fff;
+  background-image:
+    radial-gradient(circle 5px , #FF3D00 100%, transparent 0),
+    radial-gradient(circle 5px , #FF3D00 100%, transparent 0),
+    radial-gradient(circle 5px , #FF3D00 100%, transparent 0),
+    radial-gradient(circle 5px , #FF3D00 100%, transparent 0),
+    radial-gradient(circle 5px , #FF3D00 100%, transparent 0),
+    radial-gradient(circle 5px , #FF3D00 100%, transparent 0);
+    background-repeat: no-repeat;
+  animation: move 4s linear infinite , rotate 2s linear infinite;
+}
+
+@keyframes rotate {
+  0% , 20%{ transform: rotate(0deg)}
+  30% , 40% { transform: rotate(90deg)}
+  50% , 60% { transform: rotate(180deg)}
+  70% , 80% { transform: rotate(270deg)}
+  90%,  100% { transform: rotate(360deg)}
+}
+@keyframes move {
+  0% ,  9%{
+      background-position:
+      -12px -15px,  -12px 0px, -12px 15px,
+      12px -15px,  12px 0px,  12px 15px;
+  }
+  10% , 25%{
+      background-position:
+      0px -15px,  -12px 0px, -12px 15px,
+      34px -15px,  12px 0px,  12px 15px;
+  }
+  30% , 45%{
+      background-position:
+      0px -34px, -12px -10px, -12px 12px,
+      34px -15px, 12px -10px, 12px 12px;
+  }
+  50% , 65% {
+      background-position:
+      0px -34px, -12px -34px, -12px 12px,
+      34px -12px, 0px -10px, 12px 12px;
+  }
+  70% , 85% {
+      background-position:
+      0px -34px, -12px -34px, 0px 12px,
+      34px -12px, 0px -10px, 34px 12px;
+  }
+ 90% , 100% {
+      background-position:
+      0px -34px, -12px -34px, 0px 0px,
+      34px -12px, 0px 0px, 34px 12px;
+  }
+}
+  
+
+</style>
+</head>
+<body>
+
+<nav>
+	<div class="up">&larr; UP</div>
+</nav>
+<div class="feature" id="chart"></div>
+<span class="loader"></span>
+<script>
+const func = () => {
+
+	console.log('run')
+
+	const loader = document.querySelector('.loader')
+
+	fetch('http://localhost:8080/api/data').then( res => res.json()).then( data  => {
+
+
+  if(data.name && loader.style.visibility != 'hidden') {
+		loader.style.visibility = 'hidden'
+	}
+
+    var width = height = 100, // % of the parent element
+	
+	x = d3.scaleLinear().domain([0, width]).range([0, width]),
+    y = d3.scaleLinear().domain([0, height]).range([0, height]),
+	
+
+
+	color = d3.scaleOrdinal()
+		.range(
+			// d3.schemeYlGn[9]
+			// .map(function(c) { 
+			// 	c = d3.rgb(c); 
+			// 	c.opacity = 1; 
+			// 	return c; 
+			// })
+			["Green","grey"]
+		),
+
+
+	
+	treemap = d3.treemap()
+    	.size([width, height])
+		.paddingTop(2)
+    	.paddingInner(0.3)
+    	.round(false), //true
+
+
+
+	nodes = d3.hierarchy(data)
+		.sum(function(d) { 
+			return d.value ? 1 : 0; }),
+		// .sort(function(a, b) { return b.height - a.height || b.value - a.value });
+	
+	currentDepth;
+
+
+treemap(nodes);
+
+
+var chart = d3.select("#chart");
+var cells = chart
+	.selectAll(".node")
+	.data(nodes.descendants())
+	.enter()
+	.append("div")
+	.attr("class", function(d) { return "node level-" + d.depth; })
+	.attr("title", function(d) { return d.data.symbol ? d.data.symbol : "null"; })
+
+
+
+
+ const upperCell = cells
+	.style("left", function(d) { return x(d.x0) + "%"; })
+	.style("top", function(d) { return y(d.y0) + "%"; })
+	.style("width", function(d) { return x(d.x1) - x(d.x0) + "%"; })
+	.style("height", function(d) { return y(d.y1) - y(d.y0) + "%"; })
+	.style("background-color", function(d) { while (d.depth > 2) d = d.parent; return color(d.data.sector); })
+	.on("click",(d) => zoom(d))
+	.append("div")
+	.attr("class", (d) => 'children' in d  ? "label" : "label-child")
+	.append("div")
+	// .style("display","flex")
+	// .style("align-items","center")
+
+
+upperCell
+.append("p")
+.text(function(d) {return 'children' in d ? d.data.sector : d.data.symbol ? d.data.symbol: "---"; })
+	.filter( (d) => !('children' in d))
+	.append("p")
+	.text( (d) => d.data.value > 0 ? "\u2191" + "\u00A0" : "\u2193" + "\u00A0")
+	.style("color",(d) =>  d.data.value > 0 ? "blue" :"red")
+	.append("span").text((d) =>  d.data.value)
+
+
+	const lowerCell = upperCell
+	.filter( (d) => !('children' in d))
+	.append("a")
+	.text("Chart")
+	.attr("href",(d) => `http://localhost:8080/history?symbol=${d.data.symbol}`)
+	.style("display","none")
+
+	
+	
+
+	
+
+var parent = d3.select(".up")
+	.datum(nodes)
+	.on("click", (d) => {
+		zoom(d)
+	  lowerCell.style("display","none")
+	});
+
+function zoom(d) { 
+
+
+	console.log('clicked: ' + d.data.name + ', depth: ' + d.depth);
+	
+	currentDepth = d.depth;
+
+
+	parent.datum(d.parent || nodes);
+	
+	x.domain([d.x0, d.x1]);
+	y.domain([d.y0, d.y1]);
+	
+	var t = d3.transition()
+    	.duration(800)
+    	.ease(d3.easeCubicOut);
+	
+
+
+	cells
+		.transition(t)
+		.style("left", function(d) {return x(d.x0) + "%"; })
+		.style("top", function(d) { return y(d.y0) + "%"; })
+		.style("width", function(d) { return x(d.x1) - x(d.x0) + "%"; })
+		.style("height", function(d) { return y(d.y1) - y(d.y0) + "%"; });
+	
+	cells // hide this depth and above
+		.filter(function(d) { return d.ancestors(); })
+		.classed("hide", function(d) { return d.children ? true : false });
+	
+	cells // show this depth + 1 and below
+		.filter(function(d) { return d.depth > currentDepth; })
+		.classed("hide", false);
+
+lowerCell.style("display","block")
+
+}
+
+})
+
+}
+
+func()
+setInterval(func ,120000)
+
+</script>
+</body>
+</html>

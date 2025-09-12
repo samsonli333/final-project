@@ -5,10 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 
-@Setter
+
 @Getter
 @Builder
 @AllArgsConstructor
@@ -17,16 +16,16 @@ import lombok.Setter;
 public class ProfileDTO {
 private String country;
 private String currency;
-//private String estimateCurrency;
-//private String exchange;
-//private String finnhubIndustry;
-//private String ipo;
-//private String logo;
-//private Double marketCapitalization;
-//private String name;
-//private String phone;
-//private Double shareOutstanding;
-//private String ticker;
-//private String weburl;
+private String estimateCurrency;
+private String exchange;
+private String finnhubIndustry;
+private String ipo;
+private String logo;
+private Double marketCapitalization;
+private String name;
+private String phone;
+private Double shareOutstanding;
+private String ticker;
+private String weburl;
 
 }
