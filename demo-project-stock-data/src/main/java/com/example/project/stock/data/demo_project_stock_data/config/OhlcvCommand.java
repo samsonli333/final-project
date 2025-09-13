@@ -17,12 +17,12 @@ public class OhlcvCommand implements CommandLineRunner{
 
        try{
 
-        Process process = runtime.exec("jupyter nbconvert --to script /Users/samsonli/Desktop/venturenix_vincent/final-project/python_script/ohlcv.ipynb");
+        Process process = runtime.exec("jupyter nbconvert --to script C:\\Users\\Samso\\Desktop\\final-project\\python_script\\ohlcv.ipynb");
         System.out.println("Retrieve Ohlcv Command 1 launhed");
         int exitVal = process.waitFor();
         System.out.println(exitVal == 0 ? "success" : "fail");
 
-        Process process2 = runtime.exec("python /Users/samsonli/Desktop/venturenix_vincent/final-project/python_script/ohlcv.py");
+        Process process2 = runtime.exec("python C:\\Users\\Samso\\Desktop\\final-project\\python_script\\ohlcv.py");
          System.out.println("Retrieve Ohlcv Command 2 launhed");
         int exitVal2 = process2.waitFor();
         System.out.println(exitVal2 == 0 ? "success" : "fail"); 

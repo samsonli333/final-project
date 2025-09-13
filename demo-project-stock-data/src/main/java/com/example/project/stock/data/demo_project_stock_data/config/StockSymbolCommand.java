@@ -19,12 +19,12 @@ public void run(String... args) throws Exception{
 
        try{
 
-        Process process = runtime.exec("jupyter nbconvert --to script /Users/samsonli/Desktop/venturenix_vincent/final-project/python_script/symbol.ipynb");
+        Process process = runtime.exec("jupyter nbconvert --to script C:\\Users\\Samso\\Desktop\\final-project\\python_script\\symbol.ipynb");
         System.out.println("Retrieve Symbol Command 1 launhed");
         int exitVal = process.waitFor();
         System.out.println(exitVal == 0 ? "success" : "fail");
 
-        Process process2 = runtime.exec("python /Users/samsonli/Desktop/venturenix_vincent/final-project/python_script/symbol.py");
+        Process process2 = runtime.exec("python C:\\Users\\Samso\\Desktop\\final-project\\python_script\\symbol.py");
          System.out.println("Retrieve Symbol Command 2 launhed");
         int exitVal2 = process2.waitFor();
         System.out.println(exitVal2 == 0 ? "success" : "fail"); 
