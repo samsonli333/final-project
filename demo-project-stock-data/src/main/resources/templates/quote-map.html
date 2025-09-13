@@ -175,14 +175,22 @@ margin-top: 0;
 <div class="feature" id="chart"></div>
 <span class="loader"></span>
 <script>
-const func = () => {
+
+const str = 'A,AAPL,ABBV,ABNB,ABT,ACGL,ACN,ADBE,ADI,ADM,ADP,ADSK,AEE,AEP,AES,AFL,AIG,AIZ,AJG,AKAM,ALB,ALGN,ALL,ALLE,AMAT,AMCR,AMD,AME,AMGN,AMP,AMT,AMZN,ANET,AON,AOS,APA,APD,APH,APO,APTV,ARE,ATO,AVB,AVGO,AVY,AWK,AXON,AXP,AZO,BA'
+
+
+
+const func = async() => {
 
 	console.log('run')
 
 	const loader = document.querySelector('.loader')
 
-	fetch('http://localhost:8080/api/data').then( res => res.json()).then( data  => {
+	try{
 
+	const res = await fetch('http://localhost:8080/api/data')
+
+	const data = await res.json()
 
   if(data.name && loader.style.visibility != 'hidden') {
 		loader.style.visibility = 'hidden'
@@ -249,8 +257,9 @@ var cells = chart
 	.append("div")
 	.attr("class", (d) => 'children' in d  ? "label" : "label-child")
 	.append("div")
-	// .style("display","flex")
-	// .style("align-items","center")
+	.style("display","flex")
+	.style("align-items","center")
+	.style('gap',"5rem")
 
 
 upperCell
@@ -267,8 +276,8 @@ upperCell
 	.filter( (d) => !('children' in d))
 	.append("a")
 	.text("Chart")
-	.attr("href",(d) => `http://localhost:8080/history?symbol=${d.data.symbol}`)
 	.style("display","none")
+	.on('click',(d) => window.open(`http://localhost:8080/history?symbol=${d.data.symbol}`,'_blank'))
 
 	
 	
@@ -277,15 +286,14 @@ upperCell
 
 var parent = d3.select(".up")
 	.datum(nodes)
-	.on("click", (d) => {
-		zoom(d)
-	  lowerCell.style("display","none")
-	});
+	.on("click", zoom);
 
 function zoom(d) { 
 
+	
 
 	console.log('clicked: ' + d.data.name + ', depth: ' + d.depth);
+
 	
 	currentDepth = d.depth;
 
@@ -298,7 +306,7 @@ function zoom(d) {
 	var t = d3.transition()
     	.duration(800)
     	.ease(d3.easeCubicOut);
-	
+
 
 
 	cells
@@ -316,11 +324,20 @@ function zoom(d) {
 		.filter(function(d) { return d.depth > currentDepth; })
 		.classed("hide", false);
 
+
+	if(d.depth == 0) {
+	lowerCell.style("display","none")
+}else{
 lowerCell.style("display","block")
+}
+
 
 }
 
-})
+
+}catch(e){
+	console.error("error: ",e)
+}
 
 }
 
