@@ -4,7 +4,8 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
-public class DateConvert {
+
+public class DateConvert{
      public static LocalDateTime convertDate(Long num){
       Long numNilli = num * 1000L;
       Instant instant = Instant.ofEpochMilli(numNilli);
@@ -12,4 +13,5 @@ public class DateConvert {
       LocalDateTime localDateTime = LocalDateTime.ofInstant(instant, zoneId);
       return localDateTime; 
      }
+
 }

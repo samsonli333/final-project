@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[ ]:
+# In[6]:
 
 
 import string
@@ -9,9 +9,11 @@ import pandas as pd
 from sqlalchemy import create_engine , MetaData , Table ,Column ,BigInteger,String,Date,text,update
 from datetime import datetime 
 
+
 url = "https://raw.githubusercontent.com/datasets/s-and-p-500-companies/master/data/constituents.csv"
 
 engine = create_engine("postgresql+psycopg2://"":""@localhost:5432/final_project")
+
 
 metadata = MetaData()
 

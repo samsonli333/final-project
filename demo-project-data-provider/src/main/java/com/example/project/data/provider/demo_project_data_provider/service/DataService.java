@@ -1,12 +1,16 @@
 package com.example.project.data.provider.demo_project_data_provider.service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import com.example.project.data.provider.demo_project_data_provider.model.NewsDTO;
 import com.example.project.data.provider.demo_project_data_provider.model.ProfileDTO;
 import com.example.project.data.provider.demo_project_data_provider.model.QuoteDTO;
 import com.example.project.data.provider.demo_project_data_provider.model.StockQuoteDTO;
@@ -21,6 +25,9 @@ public class DataService {
   private String dataUrl = "https://finnhub.io/api/v1/quote?symbol=";
   private String profileUrl =
       "https://finnhub.io/api/v1/stock/profile2?symbol=";
+
+  private String newUrl = "https://finnhub.io/api/v1/company-news?symbol=";
+
 
 
   @Autowired
@@ -63,6 +70,33 @@ public class DataService {
     }
 
     return listProfile;
+  }
+
+
+  public List<NewsDTO> getNews(String symbol) {
+
+
+    LocalDate today = LocalDate.now();
+    LocalDate prevDate = today.minusDays(3);
+
+    DateTimeFormatter customFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+    System.out.println(prevDate.format(customFormat));
+
+    String token = "&token=" + this.apiKey;
+    String from = "&from=" + prevDate.format(customFormat);
+    String to = "&to=" + today.format(customFormat);
+
+    String url = this.newUrl + symbol + from + to + token;
+
+    NewsDTO[] newsDtosRes =
+        this.restTemplate.getForObject(url, NewsDTO[].class);
+
+    NewsDTO[] newsDtos = Optional.ofNullable(newsDtosRes)
+        .orElseThrow(() -> new NullPointerException());
+
+    return Arrays.asList(newsDtos);
+
   }
 
 }

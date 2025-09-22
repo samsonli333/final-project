@@ -10,3 +10,8 @@ spring:
     show-sql: true
     hibernate.ddl-auto: update
 limit: 50
+scriptPath:
+  ohlcv1: "jupyter nbconvert --to script /Users/samsonli/Desktop/venturenix_vincent/final-project/python_script/ohlcv.ipynb"
+  ohlcv2: "python /Users/samsonli/Desktop/venturenix_vincent/final-project/python_script/ohlcv.py"
+  stockSymbol1: "jupyter nbconvert --to script /Users/samsonli/Desktop/venturenix_vincent/final-project/python_script/symbol.ipynb"
+  stockSymbol2: "python /Users/samsonli/Desktop/venturenix_vincent/final-project/python_script/symbol.py"

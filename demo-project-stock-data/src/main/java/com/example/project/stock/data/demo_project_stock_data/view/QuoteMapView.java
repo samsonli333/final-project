@@ -20,4 +20,8 @@ public class QuoteMapView {
     return "history-chart";
   }
   
+  @GetMapping("/quotedetails")
+  public String quoteDetails(){
+    return "quote-details";
+  }
 }

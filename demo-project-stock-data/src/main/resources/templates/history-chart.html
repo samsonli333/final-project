@@ -23,7 +23,6 @@ const symbol = urlParams.get('symbol')
 
 fetch(`http://localhost:8080/api/history?symbol=${symbol}`).then( res => res.json()).then( result => {
 
- console.log(result)
   
 
 var trace = {

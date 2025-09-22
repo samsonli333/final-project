@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import com.example.project.stock.data.demo_project_stock_data.enity.StockProfile;
+import com.example.project.stock.data.demo_project_stock_data.enity.StockSymbol;
 import jakarta.transaction.Transactional;
 
 
@@ -40,5 +41,7 @@ public interface StockProfileRepository extends JpaRepository<StockProfile, Long
         "weburl = EXCLUDED.weburl,\n" + //
         "stock_id = EXCLUDED.stock_id",nativeQuery = true)
   public int upsert();
+
+  public StockProfile findByStockSymbol(StockSymbol stockSymbol);
   
 }

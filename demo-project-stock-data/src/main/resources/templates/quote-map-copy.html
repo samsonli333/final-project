@@ -84,14 +84,16 @@ margin-top: 0;
  .node.hide .label {
 	 filter: blur(10px);
 }
-
+ /* .node:hover .label {
+	 color: rgba(255, 255, 255, 1);
+} */
  .node.level-0 {
 	 z-index: 0;
 	 font-size: 2.5vmin;
 	 display: none;
 }
  .node.level-1 {
-	 z-index: 1;
+	 z-index: 0;
 	 font-size: 1.2vmin;
 	 background-color: transparent !important;
 }
@@ -206,13 +208,11 @@ margin-top: 0;
 <script>
 
 
-const loader = document.querySelector('.loader')
+const func = async() => {
 
-var chart = d3.select("#chart");
+	console.log('run')
 
-const func = async(num) => {
-
-	console.log(`run ${num}`)
+	const loader = document.querySelector('.loader')
 
 	try{
 
@@ -220,13 +220,13 @@ const func = async(num) => {
 
 	const data = await res.json()
 
+	// await new Promise( resolve => setTimeout(() => resolve(),1000))  
+
   if(data.name && loader.style.visibility != 'hidden') {
 		loader.style.visibility = 'hidden'
 	}
 
-
-
-   var width = height = 100, // % of the parent element
+    var width = height = 100, // % of the parent element
 	
 	x = d3.scaleLinear().domain([0, width]).range([0, width]),
     y = d3.scaleLinear().domain([0, height]).range([0, height]),
@@ -234,33 +234,51 @@ const func = async(num) => {
 
 
 	color = d3.scaleOrdinal()
-		.range(["#00ff00","Green","gray","maroon","black"]);
+		.range(
+			// d3.schemeYlGn[9]
+			// .map(function(c) { 
+			// 	c = d3.rgb(c); 
+			// 	c.opacity = 1; 
+			// 	return c; 
+			// })
+			["#00ff00","Green","gray","maroon","black"]
+		),
 
- 
-	nodes = d3.hierarchy(data)
-		.sum(function(d) { 
-			return d.stockId ? 1 : 0; 
-		});
 
-
+	
 	treemap = d3.treemap()
     	.size([width, height])
-    	.round(false);
+		// .paddingTop(2)									
+    	// .paddingInner(0.1)
+    	.round(false), //true
 
-	treemap(nodes);
 
-if(num == 1) {
 
+	nodes = d3.hierarchy(data)
+		.sum(function(d) { 
+			return d.stockId  ? 1 : 0; }),
+		// .sort(function(a, b) { return b.height - a.height || b.value - a.value });
+	
+	currentDepth;
+
+
+treemap(nodes);
+
+
+var chart = d3.select("#chart");
 var cells = chart
 	.selectAll(".node")
 	.data(nodes.descendants())
+
+	cells
 	.enter()
 	.append("div")
 	.attr("class", function(d) { return "node level-" + d.depth; })
-	.attr("title", function(d) { return d.data.symbol ? d.data.symbol : "null"; });
+	.attr("title", function(d) { return d.data.symbol ? d.data.symbol : "null"; })
 
+  
 
-const upperCell = cells
+ const upperCell = cells
 	.style("left", function(d) { return x(d.x0) + "%"; })
 	.style("top", function(d) { return y(d.y0) + "%"; })
 	.style("width", function(d) { return x(d.x1) - x(d.x0) + "%"; })
@@ -274,7 +292,7 @@ const upperCell = cells
 	.style('gap',"5rem")
 
 
- upperCell
+upperCell
 .append("p")
 .classed("industry-title",(d) => ('children' in d))
 .style("background-color", function(d) { while (d.depth > 2 ) d = d.parent; if('children' in d) return color(d.data.sector); })
@@ -282,38 +300,66 @@ const upperCell = cells
 	.filter( (d) => !('children' in d))
 	.on("click",(d) =>  window.open(`http://localhost:8080/quotedetails?symbol=${d.data.symbol}`,'_blank'))
 	.append("p")
-	.classed('quote',(d) => !('children' in d))
-		.text( (d) =>  d.data.value != 0 ? d.data.value > 0 ? "\u2191" + "\u00A0" : "\u2193" + "\u00A0":"")
-	.style("color",(d) =>  d.data.value != 0 ? d.data.value > 0 ? "blue" : "red":"white")
-	.append("span").text((d) =>	d.data.value > 0 ? "+" + d.data.value.toFixed(2) + "%":d.data.value.toFixed(2) + "%")
+	.text( (d) => d.data.value > 0 ? "\u2191" + "\u00A0" : "\u2193" + "\u00A0")
+	.style("color",(d) =>  d.data.value > 0 ? "blue" :"red")
+	.append("span").text((d) =>  d.data.value)
+ 
 
-const level1s = document.querySelectorAll('.level-1')
+	// const hyperLink = upperCell
+	// .filter( (d) => !('children' in d))
+	// .append("a")
+	// .text("Chart")
+	// .style("display","none")
+	// .on('click',(d) => window.open(`http://localhost:8080/history?symbol=${d.data.symbol}`,'_blank'))
 
-level1s.forEach( level1 => {
-	level1.addEventListener('mouseenter', (e) => 	{
-		console.log(e)
-		 setTimeout( () => (e.target.style.zIndex = 1),1500)
-		e.target.style.zIndex = 0
-	})
-})
+	
+	
 
+	
 
+// var parent = d3.select(".up")
+// 	.datum(nodes)
+// 	.on("click", zoom);
 
-}
+// function zoom(d) { 
 
-if( num == 2){
-	const quoteText = d3.selectAll('.quote').data(nodes.descendants().filter( (d) => !('children' in d)))
-		quoteText.join( 
-	enter => enter,
-	update => update
-	.text( (d) =>  d.data.value != 0 ? d.data.value > 0 ? "\u2191" + "\u00A0" : "\u2193" + "\u00A0":"")
-	.style("color",(d) =>  d.data.value != 0 ? d.data.value > 0 ? "blue" : "red":"white")
-	.append("span").text((d) =>	d.data.value > 0 ? "+" + d.data.value.toFixed(2) + "%":d.data.value.toFixed(2) + "%")
-	)
-}
+// 	console.log('clicked: ' + d.data.name + ', depth: ' + d.depth);
 
 
+// 	currentDepth = d.depth;
 
+// 	parent.datum(d.parent || nodes);
+	
+// 	x.domain([d.x0, d.x1]);
+// 	y.domain([d.y0, d.y1]);
+	
+// 	var t = d3.transition()
+//     	.duration(800)
+//     	.ease(d3.easeCubicOut);
+
+// 	cells
+// 		.transition(t)
+// 		.style("left", function(d) {return x(d.x0) + "%"; })
+// 		.style("top", function(d) { return y(d.y0) + "%"; })
+// 		.style("width", function(d) { return x(d.x1) - x(d.x0) + "%"; })
+// 		.style("height", function(d) { return y(d.y1) - y(d.y0) + "%"; });
+	
+// 	cells // hide this depth and above
+// 		.filter(function(d) { return d.ancestors(); })
+// 		.classed("hide", function(d) { return d.children ? true : false });
+	
+// 	cells // show this depth + 1 and below
+// 		.filter(function(d) { return d.depth > currentDepth; })
+// 		.classed("hide", false);
+
+
+// 	if(d.depth == 0) {
+// 	hyperLink.style("display","none")
+// }else{
+// hyperLink.style("display","block")
+// }
+
+// }
 
 }catch(e){
 	console.error("error: ",e)
@@ -324,12 +370,11 @@ if( num == 2){
 
 
 
-func(1)
-setInterval(() => func(2) ,5000)
 
 
 
-
+func()
+setInterval(func ,15000)
 
 </script>
 </body>

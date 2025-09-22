@@ -1,6 +1,7 @@
 package com.example.project.stock.data.demo_project_stock_data.config;
 
 import java.io.IOException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -9,6 +10,12 @@ import org.springframework.stereotype.Component;
 @Component
 @Order(1)
 public class StockSymbolCommand implements CommandLineRunner{
+
+  @Value("${scriptPath.stockSymbol1}")
+  private String commandPath1;
+
+   @Value("${scriptPath.stockSymbol2}")
+  private String commandPath2;
 
   @Override
 public void run(String... args) throws Exception{
@@ -19,12 +26,14 @@ public void run(String... args) throws Exception{
 
        try{
 
-        Process process = runtime.exec("jupyter nbconvert --to script /Users/samsonli/Desktop/venturenix_vincent/final-project/python_script/symbol.ipynb");
+        // Process process = runtime.exec("jupyter nbconvert --to script /Users/samsonli/Desktop/venturenix_vincent/final-project/python_script/symbol.ipynb");
+         Process process = runtime.exec(this.commandPath1);
         System.out.println("Retrieve Symbol Command 1 launhed");
         int exitVal = process.waitFor();
         System.out.println(exitVal == 0 ? "success" : "fail");
 
-        Process process2 = runtime.exec("python /Users/samsonli/Desktop/venturenix_vincent/final-project/python_script/symbol.py");
+        // Process process2 = runtime.exec("python /Users/samsonli/Desktop/venturenix_vincent/final-project/python_script/symbol.py");
+        Process process2 = runtime.exec(this.commandPath2);
          System.out.println("Retrieve Symbol Command 2 launhed");
         int exitVal2 = process2.waitFor();
         System.out.println(exitVal2 == 0 ? "success" : "fail"); 

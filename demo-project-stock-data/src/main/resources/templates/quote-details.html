@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Market Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lightweight-charts@4.2.1/dist/lightweight-charts.standalone.production.js"></script>
+     <script src="/plotly-3.1.0.min.js" charset="utf-8"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/quote_details_styles.css">
+</head>
+<body class="bg-gray-800 dark:bg-gray-700 text-gray-900 dark:text-gray-100 transition-colors duration-300">
+    <div class="bg-gray-800 dark:bg-gray-700 text-white py-2 ticker-wrap fixed top-0 left-0 right-0 z-50 shadow-md">
+        <div class="ticker-move">
+            </div>
+    </div>
+
+    <nav class="bg-white dark:bg-gray-800 shadow-lg sticky top-10 z-40 transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#" class="text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium"></a>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <button id="theme-toggle" type="button" class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5">
+                        <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+                        <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </nav>
+
+    <main class="pt-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <section class="mb-8">
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg transition-colors duration-300">
+          
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div id='chart' class="lg:col-span-2">
+                        <div id="chart-container" class="w-full h-96 bg-gray-50 dark:bg-gray-700 rounded-md shadow p-1 relative">
+                           <div id="chart-loader" class="absolute inset-0 flex items-center justify-center bg-white dark:bg-gray-800 bg-opacity-75 dark:bg-opacity-75 z-10">
+                                <svg class="animate-spin h-10 w-10 text-indigo-600 dark:text-indigo-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                  </svg>
+                                  <span class="ml-3 text-gray-700 dark:text-gray-300">Loading chart data...</span>
+                           </div> 
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-1 space-y-4">
+                        <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200" id="company-name">Company Overview</h2>
+                        <div id="stock-details" class="bg-gray-50 dark:bg-gray-700 p-4 rounded-md shadow space-y-2">
+                            <p class="text-sm text-gray-600 dark:text-gray-400">Search for a stock to see details.</p>
+                            </div>
+                        <button id="addToWatchlistBtn" class="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-md transition-colors duration-300 disabled:opacity-50 ">
+                            past 1 year
+                        </button>
+                        <button id="setPriceAlertBtn" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md transition-colors duration-300 disabled:opacity-50 ">
+                            pas 2 year
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <section class="mb-8">
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg transition-colors duration-300">
+                <h2 class="text-2xl font-bold mb-4 text-gray-800 dark:text-gray-200">Latest News</h2>
+                <div id="news-feed" class="space-y-4">
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Loading news...</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-800 dark:bg-gray-700 text-white py-8 text-center transition-colors duration-300">
+    </footer>
+
+
+    </div> 
+    <script src="/quote_details_script.js"></script>
+    <script src="/history_chart.js"></script>
+</body>
+</html>

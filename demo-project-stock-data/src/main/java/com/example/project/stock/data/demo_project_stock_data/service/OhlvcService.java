@@ -20,12 +20,19 @@ public class OhlvcService {
   @Autowired
   private OhlvRepository ohlvRepository;
 
-  public OhlcvHistory getHistoryBySymbol(String symbol) {
-
+  public OhlcvHistory getHistoryBySymbol(String symbol,int start) {
+    LocalDate past1Year = LocalDate.now().minusYears(1);
+    LocalDate past2Year = LocalDate.now().minusYears(2);
+    LocalDate pastTime = start != 0 ? start == 1 ? past1Year : past2Year : LocalDate.now().minusYears(5); 
     StockSymbol stockSymbol = this.stockSymbolRepository.findBySymbol(symbol)
         .orElseThrow(() -> new NullPointerException());      
 
-      List<Ohlcv> ohlcvs = this.ohlvRepository.findByStockSymbol(stockSymbol);
+      List<Ohlcv> ohlcvs = this.ohlvRepository.findByStockSymbol(stockSymbol)
+      .stream().filter(x -> x.getDate()
+      .isAfter(pastTime) || x.getDate().isEqual(pastTime))
+      .collect(Collectors.toList());
+
+
       
       List<Double> open = ohlcvs.stream().map(x -> x.getOpen()).collect(Collectors.toList());
       List<Double> close = ohlcvs.stream().map(x -> x.getClose()).collect(Collectors.toList());
