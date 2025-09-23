@@ -1,5 +1,8 @@
 const chart = document.getElementById('chart')
 
+const chartLoader = document.getElementById('chart-container').outerHTML
+
+
 urlParams = new URLSearchParams(window.location.search);
 const symbol = urlParams.get('symbol')
 
@@ -14,7 +17,12 @@ const func = async(num = 0) => {
 
 const [history] = await Promise.all([fetchHistory(symbol,num)]) 
 
-  if(history) chart.innerHTML = '<div id="myDiv" ></div>'
+ if (!('date' in history)) {
+   chart.innerHTML = chartLoader
+   await new Promise ( resolve => setTimeout(resolve,200))
+ }else{
+   chart.innerHTML = '<div id="myDiv" ></div>'
+ }
 
 
 var trace = {

@@ -134,65 +134,45 @@ margin-top: 0;
 }
 
 .loader {
-  width: 54px;
-  height: 54px;
-  position:absolute;
+  font-size: 10px;
+  width: 1em;
+  height: 1em;
+	position:absolute;
   top: 50%;
 	left: 50%;
 	transform: translateX(-50%) translateY(-50%);
-  border-radius: 4px;
-  background-color: #fff;
-  background-image:
-    radial-gradient(circle 5px , #FF3D00 100%, transparent 0),
-    radial-gradient(circle 5px , #FF3D00 100%, transparent 0),
-    radial-gradient(circle 5px , #FF3D00 100%, transparent 0),
-    radial-gradient(circle 5px , #FF3D00 100%, transparent 0),
-    radial-gradient(circle 5px , #FF3D00 100%, transparent 0),
-    radial-gradient(circle 5px , #FF3D00 100%, transparent 0);
-    background-repeat: no-repeat;
-  animation: move 4s linear infinite , rotate 2s linear infinite;
+  border-radius: 50%;
+  text-indent: -9999em;
+  animation: mulShdSpin 1.1s infinite ease;
+  transform: translateZ(0);
 }
-
-@keyframes rotate {
-  0% , 20%{ transform: rotate(0deg)}
-  30% , 40% { transform: rotate(90deg)}
-  50% , 60% { transform: rotate(180deg)}
-  70% , 80% { transform: rotate(270deg)}
-  90%,  100% { transform: rotate(360deg)}
-}
-@keyframes move {
-  0% ,  9%{
-      background-position:
-      -12px -15px,  -12px 0px, -12px 15px,
-      12px -15px,  12px 0px,  12px 15px;
+@keyframes mulShdSpin {
+  0%,
+  100% {
+    box-shadow: 0em -2.6em 0em 0em #ffffff, 1.8em -1.8em 0 0em rgba(255,255,255, 0.2), 2.5em 0em 0 0em rgba(255,255,255, 0.2), 1.75em 1.75em 0 0em rgba(255,255,255, 0.2), 0em 2.5em 0 0em rgba(255,255,255, 0.2), -1.8em 1.8em 0 0em rgba(255,255,255, 0.2), -2.6em 0em 0 0em rgba(255,255,255, 0.5), -1.8em -1.8em 0 0em rgba(255,255,255, 0.7);
   }
-  10% , 25%{
-      background-position:
-      0px -15px,  -12px 0px, -12px 15px,
-      34px -15px,  12px 0px,  12px 15px;
+  12.5% {
+    box-shadow: 0em -2.6em 0em 0em rgba(255,255,255, 0.7), 1.8em -1.8em 0 0em #ffffff, 2.5em 0em 0 0em rgba(255,255,255, 0.2), 1.75em 1.75em 0 0em rgba(255,255,255, 0.2), 0em 2.5em 0 0em rgba(255,255,255, 0.2), -1.8em 1.8em 0 0em rgba(255,255,255, 0.2), -2.6em 0em 0 0em rgba(255,255,255, 0.2), -1.8em -1.8em 0 0em rgba(255,255,255, 0.5);
   }
-  30% , 45%{
-      background-position:
-      0px -34px, -12px -10px, -12px 12px,
-      34px -15px, 12px -10px, 12px 12px;
+  25% {
+    box-shadow: 0em -2.6em 0em 0em rgba(255,255,255, 0.5), 1.8em -1.8em 0 0em rgba(255,255,255, 0.7), 2.5em 0em 0 0em #ffffff, 1.75em 1.75em 0 0em rgba(255,255,255, 0.2), 0em 2.5em 0 0em rgba(255,255,255, 0.2), -1.8em 1.8em 0 0em rgba(255,255,255, 0.2), -2.6em 0em 0 0em rgba(255,255,255, 0.2), -1.8em -1.8em 0 0em rgba(255,255,255, 0.2);
   }
-  50% , 65% {
-      background-position:
-      0px -34px, -12px -34px, -12px 12px,
-      34px -12px, 0px -10px, 12px 12px;
+  37.5% {
+    box-shadow: 0em -2.6em 0em 0em rgba(255,255,255, 0.2), 1.8em -1.8em 0 0em rgba(255,255,255, 0.5), 2.5em 0em 0 0em rgba(255,255,255, 0.7), 1.75em 1.75em 0 0em #ffffff, 0em 2.5em 0 0em rgba(255,255,255, 0.2), -1.8em 1.8em 0 0em rgba(255,255,255, 0.2), -2.6em 0em 0 0em rgba(255,255,255, 0.2), -1.8em -1.8em 0 0em rgba(255,255,255, 0.2);
   }
-  70% , 85% {
-      background-position:
-      0px -34px, -12px -34px, 0px 12px,
-      34px -12px, 0px -10px, 34px 12px;
+  50% {
+    box-shadow: 0em -2.6em 0em 0em rgba(255,255,255, 0.2), 1.8em -1.8em 0 0em rgba(255,255,255, 0.2), 2.5em 0em 0 0em rgba(255,255,255, 0.5), 1.75em 1.75em 0 0em rgba(255,255,255, 0.7), 0em 2.5em 0 0em #ffffff, -1.8em 1.8em 0 0em rgba(255,255,255, 0.2), -2.6em 0em 0 0em rgba(255,255,255, 0.2), -1.8em -1.8em 0 0em rgba(255,255,255, 0.2);
   }
- 90% , 100% {
-      background-position:
-      0px -34px, -12px -34px, 0px 0px,
-      34px -12px, 0px 0px, 34px 12px;
+  62.5% {
+    box-shadow: 0em -2.6em 0em 0em rgba(255,255,255, 0.2), 1.8em -1.8em 0 0em rgba(255,255,255, 0.2), 2.5em 0em 0 0em rgba(255,255,255, 0.2), 1.75em 1.75em 0 0em rgba(255,255,255, 0.5), 0em 2.5em 0 0em rgba(255,255,255, 0.7), -1.8em 1.8em 0 0em #ffffff, -2.6em 0em 0 0em rgba(255,255,255, 0.2), -1.8em -1.8em 0 0em rgba(255,255,255, 0.2);
+  }
+  75% {
+    box-shadow: 0em -2.6em 0em 0em rgba(255,255,255, 0.2), 1.8em -1.8em 0 0em rgba(255,255,255, 0.2), 2.5em 0em 0 0em rgba(255,255,255, 0.2), 1.75em 1.75em 0 0em rgba(255,255,255, 0.2), 0em 2.5em 0 0em rgba(255,255,255, 0.5), -1.8em 1.8em 0 0em rgba(255,255,255, 0.7), -2.6em 0em 0 0em #ffffff, -1.8em -1.8em 0 0em rgba(255,255,255, 0.2);
+  }
+  87.5% {
+    box-shadow: 0em -2.6em 0em 0em rgba(255,255,255, 0.2), 1.8em -1.8em 0 0em rgba(255,255,255, 0.2), 2.5em 0em 0 0em rgba(255,255,255, 0.2), 1.75em 1.75em 0 0em rgba(255,255,255, 0.2), 0em 2.5em 0 0em rgba(255,255,255, 0.2), -1.8em 1.8em 0 0em rgba(255,255,255, 0.5), -2.6em 0em 0 0em rgba(255,255,255, 0.7), -1.8em -1.8em 0 0em #ffffff;
   }
 }
-  
 
 </style>
 </head>
@@ -219,6 +199,8 @@ const func = async(num) => {
 	const res = await fetch('http://localhost:8080/api/data')
 
 	const data = await res.json()
+
+	if(num == 1) await new Promise( resolve => setTimeout(resolve,1000))
 
   if(data.name && loader.style.visibility != 'hidden') {
 		loader.style.visibility = 'hidden'
@@ -291,7 +273,6 @@ const level1s = document.querySelectorAll('.level-1')
 
 level1s.forEach( level1 => {
 	level1.addEventListener('mouseenter', (e) => 	{
-		console.log(e)
 		 setTimeout( () => (e.target.style.zIndex = 1),1500)
 		e.target.style.zIndex = 0
 	})

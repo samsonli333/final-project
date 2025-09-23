@@ -26,13 +26,11 @@ public void run(String... args) throws Exception{
 
        try{
 
-        // Process process = runtime.exec("jupyter nbconvert --to script /Users/samsonli/Desktop/venturenix_vincent/final-project/python_script/symbol.ipynb");
          Process process = runtime.exec(this.commandPath1);
         System.out.println("Retrieve Symbol Command 1 launhed");
         int exitVal = process.waitFor();
         System.out.println(exitVal == 0 ? "success" : "fail");
 
-        // Process process2 = runtime.exec("python /Users/samsonli/Desktop/venturenix_vincent/final-project/python_script/symbol.py");
         Process process2 = runtime.exec(this.commandPath2);
          System.out.println("Retrieve Symbol Command 2 launhed");
         int exitVal2 = process2.waitFor();
