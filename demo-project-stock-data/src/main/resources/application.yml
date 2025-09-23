@@ -15,3 +15,4 @@ scriptPath:
   ohlcv2: "python /Users/samsonli/Desktop/venturenix_vincent/final-project/python_script/ohlcv.py"
   stockSymbol1: "jupyter nbconvert --to script /Users/samsonli/Desktop/venturenix_vincent/final-project/python_script/symbol.ipynb"
   stockSymbol2: "python /Users/samsonli/Desktop/venturenix_vincent/final-project/python_script/symbol.py"
+  stockSymbol3: "python /Users/samsonli/Desktop/venturenix_vincent/final-project/python_script/symbol.py"
