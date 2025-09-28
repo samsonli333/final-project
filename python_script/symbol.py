@@ -61,8 +61,6 @@ new_df_csv = filter_df_csv.rename(columns=new_column)
 
 
 new_df_csv.to_sql(name="stock_symbol_update",con=engine,if_exists="replace",index=True)
- 
-
 
 update_query = """
   insert into stock_symbol(
@@ -77,7 +75,6 @@ update_query = """
     founded = EXCLUDED.founded,
     updated_at = EXCLUDED.updated_at
   """
-        
 with engine.connect() as conn:
     conn.execute(text(update_query))
     conn.commit()
