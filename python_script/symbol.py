@@ -64,7 +64,6 @@ new_df_csv.to_sql(name="stock_symbol_update",con=engine,if_exists="replace",inde
 
 
 
-
 update_query = """
   insert into stock_symbol(
   symbol,sector,founded,updated_at
