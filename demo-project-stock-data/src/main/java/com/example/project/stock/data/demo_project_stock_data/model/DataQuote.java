@@ -14,5 +14,6 @@ import lombok.ToString;
 @ToString
 public class DataQuote {
   private String name;
+  private Double maxMarketCap;
   private List<GroupStockQuote> children;
 }

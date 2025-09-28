@@ -7,6 +7,8 @@ import com.example.project.stock.data.demo_project_stock_data.model.DataQuote;
 import com.example.project.stock.data.demo_project_stock_data.model.NewsDTO;
 import com.example.project.stock.data.demo_project_stock_data.model.OhlcvHistory;
 import com.example.project.stock.data.demo_project_stock_data.model.RealTimeQuoteDTO;
+import com.example.project.stock.data.demo_project_stock_data.model.StockQuoteAndProfileDTO;
+import com.example.project.stock.data.demo_project_stock_data.service.MarqueeService;
 import com.example.project.stock.data.demo_project_stock_data.service.NewsService;
 import com.example.project.stock.data.demo_project_stock_data.service.OhlvcService;
 import com.example.project.stock.data.demo_project_stock_data.service.RealTimeQuoteService;
@@ -29,6 +31,9 @@ public class DataController implements DataOperation{
  @Autowired
  private NewsService newsService;
 
+@Autowired
+private MarqueeService marqueeService;
+
   @Override
   public DataQuote getRealTimeData(){
     return this.realTimeQuoteService.getRealTimeData();
@@ -42,12 +47,17 @@ public class DataController implements DataOperation{
 
   @Override
   public RealTimeQuoteDTO getRealTimeBySymbol(String symbol){
-    return realTimeQuoteService.getRealTimeBySymbol(symbol);
+    return this.realTimeQuoteService.getRealTimeBySymbol(symbol);
   }
 
   @Override
   public List<NewsDTO> getNews(String symbol){
      return this.newsService.getNews(symbol);
+  }
+
+  @Override
+  public List<StockQuoteAndProfileDTO> getMarquee(){
+    return this.marqueeService.getMarquee();
   }
 
 }

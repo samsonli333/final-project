@@ -7,6 +7,7 @@ import com.example.project.stock.data.demo_project_stock_data.model.DataQuote;
 import com.example.project.stock.data.demo_project_stock_data.model.NewsDTO;
 import com.example.project.stock.data.demo_project_stock_data.model.OhlcvHistory;
 import com.example.project.stock.data.demo_project_stock_data.model.RealTimeQuoteDTO;
+import com.example.project.stock.data.demo_project_stock_data.model.StockQuoteAndProfileDTO;
 
 
 
@@ -28,5 +29,10 @@ public RealTimeQuoteDTO getRealTimeBySymbol(@RequestParam(name = "symbol") Strin
 
 @GetMapping(value = "/news")
 public List<NewsDTO> getNews(@RequestParam(name = "symbol") String symbol);
+
+@GetMapping(value = "marquee")
+public List<StockQuoteAndProfileDTO> getMarquee();
+
+
 
 }

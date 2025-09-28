@@ -24,11 +24,18 @@ const fetchHistory = async(symbol) => {
   return result
 }
 
+const fetchMarquee = async() =>{
+  res = await fetch(`http://localhost:8080/api/marquee`)
+  result = await res.json()
+  return result
+}
+
+
 try{
-const [data,news,history] = await Promise.all([fetchQuote(symbol2),fetchNews(symbol2),fetchHistory(symbol2)]) 
+const [data,news,history,marquee] = await Promise.all([fetchQuote(symbol2),
+  fetchNews(symbol2),fetchHistory(symbol2),fetchMarquee()]) 
 
 const {stockProfile,stockQuoteDTO} = data
-
 
 const dummyStockData = {
   data: {
@@ -36,7 +43,7 @@ const dummyStockData = {
     price: stockQuoteDTO.c,
     change: stockQuoteDTO.d,
     changePercent: stockQuoteDTO.dp.toFixed(2) + '%',
-    marketCap: stockProfile.marketCapitalization,
+    marketCap: stockProfile.marketCapitalization.toFixed(2),
     peRatio: 28.5,
     volume: '75M',
     open: stockQuoteDTO.o,
@@ -55,6 +62,26 @@ const stockDetailsDiv = document.getElementById('stock-details');
 const companyNameHeader = document.getElementById('company-name');
 
 const newsFeedDiv = document.getElementById('news-feed');
+
+const marqueeDiv = document.getElementById('quote'); 
+
+marqueeDiv.innerHTML = `
+<div class="quote">
+${marquee.map( x => `
+<div>
+<span>${x.symbol}</span>&nbsp;&nbsp
+<span class=${x.value != 0 ? x.value > 0 ? "'text-green-500 dark:text-green-400":"text-red-500 dark:text-red-400":""}>
+<span>${x.value != 0 ? x.value > 0 ? "\u2191":"\u2193":""}</span>
+<span>${x.value.toFixed(2)}</span>
+</span>
+&nbsp;&nbsp;
+</div>
+`).join(' ')
+}
+</div>
+`
+
+
 
 function displayStockDetails(stock, symbol = 'N/A') {
   if (stock) {

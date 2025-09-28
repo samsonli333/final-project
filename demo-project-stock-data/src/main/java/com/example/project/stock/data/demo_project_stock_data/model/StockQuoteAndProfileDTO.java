@@ -31,4 +31,5 @@ public class StockQuoteAndProfileDTO {
    // private Double pc;
    private LocalDateTime t;
 
+
 }

@@ -29,7 +29,7 @@ public class CompanyProfileScheduled {
   private int limit;
 
   @Scheduled(cron = "0 0 * * * *")
-  // @Scheduled(fixedDelay = 10000)
+  //@Scheduled(fixedDelay = 10000)
   public void runTask() {
     Runnable task = () -> {
       List<String> stockSymbol =

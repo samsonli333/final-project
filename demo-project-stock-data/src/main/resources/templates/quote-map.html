@@ -213,9 +213,9 @@ p{
 </head>
 <body>
 
-<nav>
+<!-- <nav>
 	<div class="up">&larr; UP</div>
-</nav>
+</nav> -->
 <div class="feature" id="chart"></div>
 <span class="loader"></span>
 <script>
@@ -234,6 +234,10 @@ const func = async(num) => {
 	const res = await fetch('http://localhost:8080/api/data')
 
 	const data = await res.json()
+	
+  const maxMarketCap = data['maxMarketCap']
+
+  delete data['maxMarketCap'] 
 
 	if(num == 1) await new Promise( resolve => setTimeout(resolve,1000))
 
@@ -253,16 +257,26 @@ const func = async(num) => {
 	color = d3.scaleOrdinal()
 		.range(["#00ff00","Green","gray","maroon","black"]);
 
- 
+ const raito = (num) => {
+let result = Math.ceil(num) / Math.ceil(maxMarketCap)
+  if( result > 0.5){
+    result = num *  0.05
+	}else if(result < 0.5){
+		result = num 
+	}
+	return result
+ }
+
+
 	nodes = d3.hierarchy(data)
 		.sum(function(d) { 
 			return d.stockId ? 1 : 0; 
+			//return d.stockId ? raito(d.marketCapitalization) : 0
 		});
-
 
 	treemap = d3.treemap()
     	.size([width, height])
-			.paddingTop((d) => d.depth == 0 ? 0 :3)
+			.paddingTop((d) => d.depth == 0 ? 0 : window.innerHeight < 650 ? 5:3)
     	.round(false);
 
 	treemap(nodes);

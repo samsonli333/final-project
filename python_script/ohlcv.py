@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[7]:
+# In[ ]:
 
 
 import requests
@@ -10,7 +10,7 @@ from sqlalchemy import create_engine ,Table, Column, MetaData, Integer, String, 
 from datetime import datetime 
 
 
-engine = create_engine("postgresql+psycopg2://"":""@localhost:5432/final_project")
+engine = create_engine("postgresql+psycopg2://postgres:admin1234@localhost:5532/final_project")
 
 
 metadata = MetaData()
@@ -95,15 +95,15 @@ for symbol in list(df_result):
     df_ohlcv["date"] = df_ohlcv["date"].apply(lambda x : datetime.fromtimestamp(x).strftime("%Y-%m-%d"))
     df_ohlcv["stock_id"] = stock_id
     df_ohlcv["updated_at"] = datetime.now()
-   
+
 
     new_result.append(df_ohlcv)
-  
+
   except Exception as err:
     print(f"Download Error: {err}")
 
 
-# In[20]:
+# In[3]:
 
 
 new_df = pd.concat(new_result,ignore_index=True)

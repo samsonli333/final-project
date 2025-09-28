@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[6]:
+# In[ ]:
 
 
 import string
@@ -12,7 +12,7 @@ from datetime import datetime
 
 url = "https://raw.githubusercontent.com/datasets/s-and-p-500-companies/master/data/constituents.csv"
 
-engine = create_engine("postgresql+psycopg2://"":""@localhost:5432/final_project")
+engine = create_engine("postgresql+psycopg2://postgres:admin1234@localhost:5532/final_project")
 
 
 metadata = MetaData()
@@ -62,6 +62,9 @@ new_df_csv = filter_df_csv.rename(columns=new_column)
 
 new_df_csv.to_sql(name="stock_symbol_update",con=engine,if_exists="replace",index=True)
 
+
+
+
 update_query = """
   insert into stock_symbol(
   symbol,sector,founded,updated_at
@@ -75,6 +78,7 @@ update_query = """
     founded = EXCLUDED.founded,
     updated_at = EXCLUDED.updated_at
   """
+
 with engine.connect() as conn:
     conn.execute(text(update_query))
     conn.commit()

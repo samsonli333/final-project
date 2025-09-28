@@ -2,6 +2,7 @@ package com.example.project.stock.data.demo_project_stock_data.service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import com.example.project.stock.data.demo_project_stock_data.enity.StockProfile;
 import com.example.project.stock.data.demo_project_stock_data.lib.DateConvert;
+import com.example.project.stock.data.demo_project_stock_data.lib.StockComparator;
 import com.example.project.stock.data.demo_project_stock_data.model.DataQuote;
 import com.example.project.stock.data.demo_project_stock_data.model.GroupStockQuote;
 import com.example.project.stock.data.demo_project_stock_data.model.StockQuoteAndProfileDTO;
@@ -31,7 +33,7 @@ public class StockQuoteService {
 
   @Autowired
   private StockSymbolRepository stockSymbolRepository;
-  
+
   @Value("${limit}")
   private int limit;
 
@@ -43,9 +45,9 @@ public class StockQuoteService {
 
 
     String[] symbolArr = (this.stockSymbolRepository
-        .findAll(Sort.by(Sort.Direction.ASC, "symbol"))).stream().limit(this.limit)
-            .map(x -> x.getSymbol()).collect(Collectors.toList())
-            .toArray(new String[0]);
+        .findAll(Sort.by(Sort.Direction.ASC, "symbol"))).stream()
+            .limit(this.limit).map(x -> x.getSymbol())
+            .collect(Collectors.toList()).toArray(new String[0]);
 
     String symbols = String.join(",", symbolArr);
 
@@ -90,8 +92,12 @@ public class StockQuoteService {
             stock.getSector(), new ArrayList<>(Arrays.asList(stock))));
       }
     }
-   
-    return new DataQuote("Info",List.copyOf(groupStockQuote.values()));
+
+    Collections.sort(stockQuoteAndProfileDTO, new StockComparator());
+
+    return new DataQuote("Info",
+        stockQuoteAndProfileDTO.get(0).getMarketCapitalization(),
+        List.copyOf(groupStockQuote.values()));
 
   }
 }
