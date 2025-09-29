@@ -18,12 +18,7 @@ const fetchNews = async(symbol) => {
    return result
   }
 
-const fetchHistory = async(symbol) => {
-  res = await fetch(`http://localhost:8080/api/history?symbol=${symbol}`)
-  result = await res.json()
-  return result
-}
-
+  
 const fetchMarquee = async() =>{
   res = await fetch(`http://localhost:8080/api/marquee`)
   result = await res.json()
@@ -32,8 +27,8 @@ const fetchMarquee = async() =>{
 
 
 try{
-const [data,news,history,marquee] = await Promise.all([fetchQuote(symbol2),
-  fetchNews(symbol2),fetchHistory(symbol2),fetchMarquee()]) 
+const [data,news,marquee] = await Promise.all([fetchQuote(symbol2),
+  fetchNews(symbol2),fetchMarquee()]) 
 
 const {stockProfile,stockQuoteDTO} = data
 
@@ -139,7 +134,6 @@ function populateNewsFeed() {
     : '<p class="text-sm text-gray-500 dark:text-gray-400">No news available at the moment.</p>';
 }
 
-
 populateNewsFeed();
 displayStockDetails(dummyStockData.data,stockQuoteDTO.symbol);
 
@@ -147,20 +141,16 @@ displayStockDetails(dummyStockData.data,stockQuoteDTO.symbol);
   console.log(err)
 }
 
-
-
-
-
-
-document.addEventListener('DOMContentLoaded', () => {
-  // populateNewsFeed();
-  // displayStockDetails(dummyStockData.AAPL);
-});
-
 }
 
 
-func2()
+document.addEventListener('DOMContentLoaded', () => {
+  func2()
+});
+
+
+
+
 
 
 

@@ -89,8 +89,7 @@
  .node.level-1 {
 	 z-index: 0;
 	 font-size: 1.2vmin;
-	 	/* border-top: 1px solid white;
-	  border-bottom: 1px solid white !important; */
+   opacity: 0.8;
 }
 
  .node.level-2 {
@@ -213,9 +212,6 @@ p{
 </head>
 <body>
 
-<!-- <nav>
-	<div class="up">&larr; UP</div>
-</nav> -->
 <div class="feature" id="chart"></div>
 <span class="loader"></span>
 <script>
@@ -356,9 +352,12 @@ if( num == 2){
 
 
 func(1)
-setInterval(() => func(2) ,5000)
+let timer = setInterval(() => func(2) ,5000)
 
-
+window.addEventListener('resize', () => {
+	 clearInterval(timer)
+   timer = setInterval(() => func(2),5000)
+})
 
 
 
